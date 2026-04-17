@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}{{ contact.full_name or contact.email }}{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center;">
+  <h2>{{ contact.full_name or contact.email }}</h2>
+  <div>
+    <a href="/admin/contacts/{{ contact.id }}/edit" role="button" class="secondary">Edit</a>
+    <form method="post" action="/admin/contacts/{{ contact.id }}/delete" style="display:inline;"
+          onsubmit="return confirm('Delete this contact and all related data?')">
+      <button type="submit" class="secondary" style="background:var(--pico-del-color); border-color:var(--pico-del-color); color:#fff;">Delete</button>
+    </form>
+  </div>
+</div>
+
+<article style="max-width:560px; margin-bottom:1.5rem;">
+  <form method="post" action="/admin/contacts/{{ contact.id }}">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+      <label>Full Name
+        <input type="text" name="full_name" value="{{ contact.full_name or '' }}">
+      </label>
+      <label>Phone
+        <input type="tel" name="phone" value="{{ contact.phone or '' }}">
+      </label>
+      <label>Company
+        <input type="text" name="company" value="{{ contact.company or '' }}">
+      </label>
+      <label>Stage
+        <select name="stage">
+          {% for s in stages %}
+          <option value="{{ s.value }}" {{ 'selected' if contact.stage == s }}>{{ s.value|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+    <button type="submit" style="width:auto;">Save Changes</button>
+  </form>
+  <hr>
+  <small>
+    Email: {{ contact.email }}<br>
+    {% if contact.stripe_customer_id %}Stripe: {{ contact.stripe_customer_id }}<br>{% endif %}
+    {% if contact.paypal_payer_id %}PayPal: {{ contact.paypal_payer_id }}<br>{% endif %}
+    Created: {{ contact.created_at.strftime("%d %b %Y %H:%M") }}
+  </small>
+</article>
+
+<!-- Orders -->
+<h4>Orders ({{ contact.orders|length }})</h4>
+{% if contact.orders %}
+<table>
+  <thead><tr><th>Provider</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+  <tbody>
+    {% for o in contact.orders|sort(attribute='created_at', reverse=True) %}
+    <tr>
+      <td>{{ o.provider.value }}</td>
+      <td>{{ o.currency }} {{ "%.2f"|format(o.amount) }}</td>
+      <td><span class="badge badge-{{ o.status.value }}">{{ o.status.value }}</span></td>
+      <td><small>{{ o.created_at.strftime("%d %b %Y") }}</small></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}<p>No orders.</p>{% endif %}
+
+<!-- Deals -->
+<h4>Deals ({{ contact.deals|length }})</h4>
+{% if contact.deals %}
+<table>
+  <thead><tr><th>Title</th><th>Value</th><th>Stage</th></tr></thead>
+  <tbody>
+    {% for d in contact.deals %}
+    <tr>
+      <td>{{ d.title }}</td>
+      <td>{{ "%.2f"|format(d.value) }}</td>
+      <td><span class="badge badge-{{ d.stage.value }}">{{ d.stage.value }}</span></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}<p>No deals.</p>{% endif %}
+
+<!-- Notes -->
+<h4>Notes</h4>
+<form method="post" action="/admin/contacts/{{ contact.id }}/notes" style="margin-bottom:1rem;">
+  <textarea name="body" placeholder="Add a note…" rows="3" required></textarea>
+  <div style="display:flex; gap:0.5rem; align-items:center;">
+    <input type="text" name="author" placeholder="Your name (optional)" style="width:200px; margin:0;">
+    <button type="submit" style="width:auto;">Add Note</button>
+  </div>
+</form>
+{% for note in contact.notes|sort(attribute='created_at', reverse=True) %}
+<article style="padding:0.75rem; margin-bottom:0.5rem;">
+  <p style="margin:0;">{{ note.body }}</p>
+  <small>{{ note.author or "Anonymous" }} · {{ note.created_at.strftime("%d %b %Y %H:%M") }}</small>
+  <form method="post" action="/admin/notes/{{ note.id }}/delete" style="display:inline; float:right;">
+    <button type="submit" class="secondary" style="padding:0.1em 0.5em; font-size:0.8em;">✕</button>
+  </form>
+</article>
+{% else %}
+<p>No notes yet.</p>
+{% endfor %}
+{% endblock %}

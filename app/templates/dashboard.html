@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Dashboard</h2>
+<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1rem; margin-bottom:2rem;">
+  {% for label, count in counts.items() %}
+  <article style="text-align:center; padding:1.25rem;">
+    <strong style="font-size:2rem;">{{ count }}</strong>
+    <div style="text-transform:capitalize;">{{ label }}</div>
+  </article>
+  {% endfor %}
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+  <article>
+    <h4>Recent Contacts</h4>
+    <table>
+      <tbody>
+        {% for c in recent_contacts %}
+        <tr>
+          <td><a href="/admin/contacts/{{ c.id }}">{{ c.full_name or c.email }}</a></td>
+          <td><span class="badge badge-{{ c.stage.value }}">{{ c.stage.value }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2">No contacts yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="/admin/contacts">View all →</a>
+  </article>
+
+  <article>
+    <h4>Recent Orders</h4>
+    <table>
+      <tbody>
+        {% for o in recent_orders %}
+        <tr>
+          <td>{{ o.currency }} {{ "%.2f"|format(o.amount) }}</td>
+          <td>{{ o.provider.value }}</td>
+          <td><span class="badge badge-{{ o.status.value }}">{{ o.status.value }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">No orders yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="/admin/orders">View all →</a>
+  </article>
+</div>
+{% endblock %}

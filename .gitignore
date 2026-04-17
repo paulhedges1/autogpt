@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+.env
+*.db
+*.sqlite3
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+caddy_data/
+caddy_config/

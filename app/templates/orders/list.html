@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Orders{% endblock %}
+{% block content %}
+<h2>Orders</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Contact</th>
+      <th>Provider</th>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Ref</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for o in orders %}
+    <tr>
+      <td>
+        {% if o.contact %}
+        <a href="/admin/contacts/{{ o.contact_id }}">{{ o.contact.full_name or o.contact.email }}</a>
+        {% else %}—{% endif %}
+      </td>
+      <td>{{ o.provider.value }}</td>
+      <td>{{ o.currency }} {{ "%.2f"|format(o.amount) }}</td>
+      <td><span class="badge badge-{{ o.status.value }}">{{ o.status.value }}</span></td>
+      <td><small>{{ o.provider_ref or "—" }}</small></td>
+      <td><small>{{ o.created_at.strftime("%d %b %Y") }}</small></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6">No orders yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

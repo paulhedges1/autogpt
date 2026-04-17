@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if contact else "New" }} Contact{% endblock %}
+{% block content %}
+<h2>{{ "Edit" if contact else "New" }} Contact</h2>
+
+{% if error %}<p style="color:var(--pico-del-color);">{{ error }}</p>{% endif %}
+
+<article style="max-width:560px;">
+  <form method="post" action="{{ '/admin/contacts/' + contact.id|string if contact else '/admin/contacts' }}">
+    <label>Email *
+      <input type="email" name="email" value="{{ contact.email if contact else '' }}" required {{ 'readonly' if contact }}>
+    </label>
+    <label>Full Name
+      <input type="text" name="full_name" value="{{ contact.full_name or '' if contact else '' }}">
+    </label>
+    <label>Phone
+      <input type="tel" name="phone" value="{{ contact.phone or '' if contact else '' }}">
+    </label>
+    <label>Company
+      <input type="text" name="company" value="{{ contact.company or '' if contact else '' }}">
+    </label>
+    <label>Stage
+      <select name="stage">
+        {% for s in stages %}
+        <option value="{{ s.value }}" {{ 'selected' if contact and contact.stage == s }}>{{ s.value|capitalize }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="submit">Save</button>
+    <a href="{{ '/admin/contacts/' + contact.id|string if contact else '/admin/contacts' }}" role="button" class="secondary">Cancel</a>
+  </form>
+</article>
+{% endblock %}

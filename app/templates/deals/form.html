@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}New Deal{% endblock %}
+{% block content %}
+<h2>New Deal</h2>
+{% if error %}<p style="color:var(--pico-del-color);">{{ error }}</p>{% endif %}
+<article style="max-width:480px;">
+  <form method="post" action="/admin/deals">
+    <label>Contact *
+      <select name="contact_id" required>
+        <option value="">— select —</option>
+        {% for c in contacts %}
+        <option value="{{ c.id }}">{{ c.full_name or c.email }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Title *
+      <input type="text" name="title" required>
+    </label>
+    <label>Value
+      <input type="number" name="value" step="0.01" min="0" value="0">
+    </label>
+    <label>Stage
+      <select name="stage">
+        {% for s in stages %}
+        <option value="{{ s.value }}">{{ s.value|capitalize }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="submit">Create Deal</button>
+    <a href="/admin/deals/pipeline" role="button" class="secondary">Cancel</a>
+  </form>
+</article>
+{% endblock %}

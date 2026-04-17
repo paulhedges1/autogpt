@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CRM{% endblock %} — CRM</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    nav { padding: 0.75rem 1.5rem; background: var(--pico-primary-background); }
+    nav a { color: #fff; text-decoration: none; margin-right: 1.25rem; font-weight: 600; }
+    nav a:hover { text-decoration: underline; }
+    .badge { display: inline-block; padding: 0.15em 0.55em; border-radius: 1em; font-size: 0.78em; font-weight: 700; }
+    .badge-lead { background:#e3f2fd; color:#1565c0; }
+    .badge-prospect { background:#fff3e0; color:#e65100; }
+    .badge-customer { background:#e8f5e9; color:#2e7d32; }
+    .badge-churned { background:#fce4ec; color:#880e4f; }
+    .badge-completed { background:#e8f5e9; color:#2e7d32; }
+    .badge-pending { background:#fff3e0; color:#e65100; }
+    .badge-refunded { background:#f3e5f5; color:#6a1b9a; }
+    .badge-disputed { background:#fce4ec; color:#880e4f; }
+    .pipeline { display: flex; gap: 1rem; overflow-x: auto; }
+    .pipeline-col { flex: 0 0 220px; background: var(--pico-card-background-color); border-radius: 0.5rem; padding: 0.75rem; }
+    .pipeline-col h4 { margin-bottom: 0.5rem; text-transform: capitalize; }
+    .deal-card { background: var(--pico-background-color); border: 1px solid var(--pico-muted-border-color); border-radius: 0.4rem; padding: 0.5rem 0.75rem; margin-bottom: 0.5rem; font-size: 0.9em; }
+    .deal-card small { color: var(--pico-muted-color); }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/admin/">Dashboard</a>
+    <a href="/admin/contacts">Contacts</a>
+    <a href="/admin/deals/pipeline">Pipeline</a>
+    <a href="/admin/orders">Orders</a>
+    {% if current_user %}
+      <span style="float:right; color:#ccc; font-size:0.9em;">
+        {{ current_user }} &nbsp;|&nbsp; <a href="/admin/logout" style="color:#ffcdd2;">Logout</a>
+      </span>
+    {% endif %}
+  </nav>
+  <main class="container" style="padding-top:1.5rem;">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

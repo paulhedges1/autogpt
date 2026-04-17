@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Contacts{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+  <h2>Contacts</h2>
+  <a href="/admin/contacts/new" role="button">+ New Contact</a>
+</div>
+
+<form method="get" style="margin-bottom:1rem;">
+  <div style="display:flex; gap:0.5rem;">
+    <input type="search" name="search" value="{{ search }}" placeholder="Search name, email, company…" style="margin:0;">
+    <button type="submit" style="width:auto;">Search</button>
+    {% if search %}<a href="/admin/contacts" role="button" class="secondary" style="width:auto;">Clear</a>{% endif %}
+  </div>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name / Email</th>
+      <th>Company</th>
+      <th>Stage</th>
+      <th>Created</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in contacts %}
+    <tr>
+      <td>
+        <a href="/admin/contacts/{{ c.id }}">{{ c.full_name or "—" }}</a><br>
+        <small>{{ c.email }}</small>
+      </td>
+      <td>{{ c.company or "—" }}</td>
+      <td><span class="badge badge-{{ c.stage.value }}">{{ c.stage.value }}</span></td>
+      <td><small>{{ c.created_at.strftime("%d %b %Y") }}</small></td>
+      <td>
+        <a href="/admin/contacts/{{ c.id }}">Edit</a>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No contacts found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

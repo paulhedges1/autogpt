@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Pipeline{% endblock %}
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+  <h2>Sales Pipeline</h2>
+  <a href="/admin/deals/new" role="button">+ New Deal</a>
+</div>
+
+<div class="pipeline">
+  {% for stage in stages %}
+  <div class="pipeline-col">
+    <h4>
+      {{ stage.value|capitalize }}
+      <span style="font-weight:400; font-size:0.85em;">({{ by_stage[stage]|length }})</span>
+    </h4>
+    {% for deal in by_stage[stage] %}
+    <div class="deal-card">
+      <strong>{{ deal.title }}</strong><br>
+      <small>{{ deal.contact.full_name or deal.contact.email }}</small><br>
+      <small>{{ deal.contact.currency if deal.contact.currency else '' }} {{ "%.2f"|format(deal.value) }}</small>
+      <form method="post" action="/admin/deals/{{ deal.id }}/delete"
+            style="display:inline; float:right;"
+            onsubmit="return confirm('Delete deal?')">
+        <button type="submit" style="padding:0 0.4em; font-size:0.8em; background:none; border:none; color:var(--pico-muted-color); cursor:pointer;">✕</button>
+      </form>
+    </div>
+    {% else %}
+    <p style="font-size:0.85em; color:var(--pico-muted-color);">Empty</p>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
