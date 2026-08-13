@@ -552,7 +552,7 @@
     state.currentSection = section || "introduction";
     refreshActiveSidebarState();
     renderModule();
-    document.getElementById("content").focus();
+    document.getElementById("content").focus({ preventScroll: true });
   }
 
   function selectCapstone() {
