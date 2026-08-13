@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Modern Digital Workplace Training Academy</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233454d1'/%3E%3Ctext x='16' y='22' font-size='14' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3EDW%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="topbar-brand">
+        <span class="brand-mark">DW</span>
+        <div class="brand-text">
+          <strong>Digital Workplace Training Academy</strong>
+          <span>Volume 1 · Digital Foundations</span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <div class="overall-progress" id="overallProgress" title="Overall course progress">
+          <div class="ring" id="overallRing"></div>
+          <span id="overallProgressLabel">0%</span>
+        </div>
+        <button class="btn ghost" id="syncBtn" type="button">Sync progress</button>
+        <div class="learner-chip" id="learnerChip" hidden>
+          <span id="learnerName"></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav class="sidebar" id="sidebar" aria-label="Modules">
+        <div class="sidebar-section-label">Course</div>
+        <ol class="module-list" id="moduleList"></ol>
+        <button class="module-review-btn" id="capstoneBtn" type="button"></button>
+      </nav>
+
+      <main class="content" id="content" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="syncModalBackdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="syncModalTitle">
+      <h2 id="syncModalTitle">Sync your progress</h2>
+      <p class="muted">
+        Your progress is always saved on this device automatically. Add a name to get a
+        short learner code so you can pick up your progress on another device or browser.
+      </p>
+
+      <div id="syncNoCode">
+        <label class="field">
+          <span>Your name</span>
+          <input type="text" id="learnerNameInput" placeholder="e.g. Rosie" maxlength="80" />
+        </label>
+        <button class="btn primary" id="createCodeBtn" type="button">Create my learner code</button>
+      </div>
+
+      <div id="syncHasCode" hidden>
+        <p>Your learner code:</p>
+        <div class="code-display" id="codeDisplay"></div>
+        <p class="muted small">Enter this code on another device to continue where you left off.</p>
+      </div>
+
+      <div class="divider">or resume with an existing code</div>
+      <label class="field">
+        <span>Learner code</span>
+        <input type="text" id="resumeCodeInput" placeholder="e.g. 7K3PQ9" maxlength="8" style="text-transform:uppercase" />
+      </label>
+      <button class="btn" id="resumeBtn" type="button">Resume this code</button>
+
+      <p class="sync-status" id="syncStatus" aria-live="polite"></p>
+      <button class="btn ghost close-modal" id="closeSyncModal" type="button">Close</button>
+    </div>
+  </div>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
